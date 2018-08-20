@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # cd /mnt/c/Users/avaer/Documents/GitHub/exokit
+# export MAGICLEAP='ZVev890668FuUaP9YRHkkl5bWdDDywR+acC6QJX3RyE='
 
 # preface
 
