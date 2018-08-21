@@ -39,19 +39,19 @@
         const id = ids++;
         const absn = ctx.createBufferSource();
         absn.buffer = buffers[Math.floor(Math.random() * buffers.length)];
-        absn.connect(ctx.destination);
-        absn.start();
+        // absn.connect(ctx.destination);
+        // absn.start();
         console.log('started ' + id);
-        absn.onended = () => {
+        /* absn.onended = () => {
           console.log('ended ' + id);
-        };
+        }; */
 
         const _timeout = fn => {
           setTimeout(fn, Math.floor(Math.random() * 20));
         };
         _timeout(() => {
           _timeout(() => {
-            absn.stop();
+            // absn.stop();
             _timeout(() => {
               absn.disconnect();
             });
