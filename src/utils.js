@@ -83,27 +83,30 @@ module.exports._runJavascript = _runJavascript;
  * @param targetContext - window or vm context that prototype will get retrieved from.
  */
 const _normalizePrototype = (obj, targetContext) => {
-  let name = obj && obj.constructor && obj.constructor.name;
-  if (obj instanceof targetContext[name]) { return obj; }
+  if (obj && typeof obj === 'object') {
+    let name = obj && obj.constructor && obj.constructor.name;
+    if (obj instanceof targetContext[name]) { return obj; }
 
-  const isToWindow = !!targetContext[symbols.prototypesSymbol];
+    // Convert Blob's buffer.
+    if (name === 'Blob') {
+      _normalizePrototype(obj.buffer, targetContext);
+      return obj;
+    }
 
-  // Convert Blob's buffer.
-  if (name === 'Blob') {
-    _normalizePrototype(obj.buffer, targetContext);
+    // Normalize to window prototype.
+    const isToWindow = !!targetContext[symbols.prototypesSymbol];
+    if (isToWindow) {
+      GlobalContext.nativeVm.setPrototype(obj, targetContext[symbols.prototypesSymbol][name] ||
+                                               targetContext[name].prototype);
+      return obj;
+    }
+
+    // Normalize to native prototype.
+    GlobalContext.nativeVm.setPrototype(obj, targetContext[name].prototype);
+    return obj;
+  } else {
     return obj;
   }
-
-  // Normalize to window prototype.
-  if (isToWindow) {
-    GlobalContext.nativeVm.setPrototype(obj, targetContext[symbols.prototypesSymbol][name] ||
-                                             targetContext[name].prototype);
-    return obj;
-  }
-
-  // Normalize to native prototype.
-  GlobalContext.nativeVm.setPrototype(obj, targetContext[name].prototype);
-  return obj;
 };
 module.exports._normalizePrototype = _normalizePrototype;
 
