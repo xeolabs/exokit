@@ -1550,8 +1550,9 @@ NAN_METHOD(MLContext::Present) {
   }
 
   {
+    // mesh shader
+
     glGenVertexArrays(1, &mlContext->meshVao);
-    // glBindVertexArray(meshVao);
 
     // vertex Shader
     mlContext->meshVertex = glCreateShader(GL_VERTEX_SHADER);
@@ -1564,7 +1565,7 @@ NAN_METHOD(MLContext::Present) {
       GLsizei length;
       glGetShaderInfoLog(mlContext->meshVertex, sizeof(infoLog), &length, infoLog);
       infoLog[length] = '\0';
-      std::cout << "ML vertex shader compilation failed:\n" << infoLog << std::endl;
+      std::cout << "ML mesh vertex shader compilation failed:\n" << infoLog << std::endl;
       return;
     };
 
@@ -1578,7 +1579,7 @@ NAN_METHOD(MLContext::Present) {
       GLsizei length;
       glGetShaderInfoLog(mlContext->meshFragment, sizeof(infoLog), &length, infoLog);
       infoLog[length] = '\0';
-      std::cout << "ML fragment shader compilation failed:\n" << infoLog << std::endl;
+      std::cout << "ML mesh fragment shader compilation failed:\n" << infoLog << std::endl;
       return;
     };
 
@@ -1593,23 +1594,23 @@ NAN_METHOD(MLContext::Present) {
       GLsizei length;
       glGetShaderInfoLog(mlContext->meshProgram, sizeof(infoLog), &length, infoLog);
       infoLog[length] = '\0';
-      std::cout << "ML program linking failed\n" << infoLog << std::endl;
+      std::cout << "ML mesh program linking failed\n" << infoLog << std::endl;
       return;
     }
 
     mlContext->positionLocation = glGetAttribLocation(mlContext->meshProgram, "position");
     if (mlContext->positionLocation == -1) {
-      std::cout << "ML program failed to get attrib location for 'position'" << std::endl;
+      std::cout << "ML mesh program failed to get attrib location for 'position'" << std::endl;
       return;
     }
     mlContext->modelViewMatrixLocation = glGetUniformLocation(mlContext->meshProgram, "modelViewMatrix");
     if (mlContext->modelViewMatrixLocation == -1) {
-      std::cout << "ML program failed to get uniform location for 'modelViewMatrix'" << std::endl;
+      std::cout << "ML meshprogram failed to get uniform location for 'modelViewMatrix'" << std::endl;
       return;
     }
     mlContext->projectionMatrixLocation = glGetUniformLocation(mlContext->meshProgram, "projectionMatrix");
     if (mlContext->projectionMatrixLocation == -1) {
-      std::cout << "ML program failed to get uniform location for 'projectionMatrix'" << std::endl;
+      std::cout << "ML mesh program failed to get uniform location for 'projectionMatrix'" << std::endl;
       return;
     }
 
